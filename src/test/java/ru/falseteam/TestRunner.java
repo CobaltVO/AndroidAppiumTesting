@@ -1,3 +1,5 @@
+package ru.falseteam;
+
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.MobileCapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -29,8 +31,8 @@ public class TestRunner extends BaseTest {
 
     @Test
     public void test() {
-        AndroidBasicInteractionTest a = new AndroidBasicInteractionTest();
-        a.testOpensAlert();
-        a.testSendKeys();
+        AndroidBasicInteractionTest test = new AndroidBasicInteractionTest();
+        test.openAlertTest();
+//        test.sendKeysTest();
     }
 }
