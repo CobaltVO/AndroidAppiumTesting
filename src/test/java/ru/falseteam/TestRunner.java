@@ -33,6 +33,6 @@ public class TestRunner extends BaseTest {
     public void test() {
         AndroidBasicInteractionTest test = new AndroidBasicInteractionTest();
         test.openAlertTest();
-//        test.sendKeysTest();
+        test.sendKeysTest();
     }
 }
