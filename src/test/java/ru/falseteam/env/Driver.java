@@ -1,17 +1,32 @@
-package ru.falseteam;
+package ru.falseteam.env;
 
+import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 
 import java.net.URL;
 
-public abstract class BaseTest {
+public class Driver {
     private static AppiumDriverLocalService service;
+    private static AndroidDriver<WebElement> driver;
 
     @BeforeSuite
-    public void globalSetup() {
+    public static void globalSetup() {
+        startAppium();
+        setDriver(Capabilities.getCapabilities());
+    }
+
+    @AfterSuite
+    public static void globalTearDown() {
+        service.stop();
+        driver.quit();
+    }
+
+    private static void startAppium() {
         AppiumServiceBuilder appiumServiceBuilder = new AppiumServiceBuilder();
         appiumServiceBuilder
                 .usingPort(Constants.APPIUM_PORT)
@@ -21,9 +36,12 @@ public abstract class BaseTest {
         service.start();
     }
 
-    @AfterSuite
-    public void globalTearDown() {
-        service.stop();
+    public static AndroidDriver<WebElement> setDriver(DesiredCapabilities dc) {
+        return (driver = new AndroidDriver<>(service, dc));
+    }
+
+    public static AndroidDriver<WebElement> getDriver() {
+        return driver;
     }
 
     public URL getServiceUrl() {

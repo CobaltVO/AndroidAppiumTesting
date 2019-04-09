@@ -1,4 +1,4 @@
-package ru.falseteam;
+package ru.falseteam.tests;
 
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
@@ -8,11 +8,12 @@ import org.testng.Assert;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
+import ru.falseteam.env.Driver;
 
 import java.io.File;
 import java.util.List;
 
-public class AndroidSelectorsTest extends BaseTest {
+public class SelectorsTest extends Driver {
     private AndroidDriver<WebElement> driver;
     private static AppiumDriverLocalService service;
     private final String PACKAGE = "io.appium.android.apis";
@@ -54,13 +55,12 @@ public class AndroidSelectorsTest extends BaseTest {
         // Look for elements by the class name. In Android this is the Java Class Name of the view.
         List<WebElement> linearLayoutElements = (List<WebElement>) driver.findElementsByClassName("android.widget.FrameLayout");
         Assert.assertTrue(linearLayoutElements.size() > 1);
-    };
+    }
 
     @Test
     public void testFindElementsByXPath () {
         // Find elements by XPath
         List<WebElement> linearLayoutElements = (List<WebElement>) driver.findElementsByXPath("//*[@class=\"android.widget.FrameLayout\"]");
         Assert.assertTrue(linearLayoutElements.size() > 1);
-    };
-
+    }
 }

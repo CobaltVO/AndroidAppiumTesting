@@ -1,4 +1,4 @@
-package ru.falseteam;
+package ru.falseteam.env;
 
 class LogLevels {
     static final String DEBUG = "debug";

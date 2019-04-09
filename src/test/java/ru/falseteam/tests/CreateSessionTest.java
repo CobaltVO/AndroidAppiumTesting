@@ -1,4 +1,4 @@
-package ru.falseteam;
+package ru.falseteam.tests;
 
 import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.WebElement;
@@ -7,10 +7,11 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import ru.falseteam.env.Driver;
 
 import java.io.File;
 
-public class AndroidCreateSessionTest extends BaseTest {
+public class CreateSessionTest extends Driver {
     private AndroidDriver<WebElement> driver;
 
     @BeforeClass

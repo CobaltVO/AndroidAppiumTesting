@@ -1,23 +1,21 @@
-package ru.falseteam;
+package ru.falseteam.tests;
 
-import io.appium.java_client.AppiumDriver;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import ru.falseteam.env.Commands;
+import ru.falseteam.env.Constants;
+import ru.falseteam.env.Driver;
 import ru.falseteam.ui.App;
 import ru.falseteam.ui.MainScreen;
 import ru.falseteam.ui.Search;
 
 import java.util.List;
 
-public class AndroidBasicInteractionTest {
-    private AppiumDriver<WebElement> driver = Env.getDriver();
+public class BasicInteractionTest {
 
     @Test()
-    public void sendKeysTest() {
+    public static void sendKeysTest() {
         // user launches the app
         Commands.launchApp();
 
@@ -36,18 +34,17 @@ public class AndroidBasicInteractionTest {
         Assert.assertNotNull(list, "No such element");
         list.get(Search.List.InvokeSearch.ordinal()).click();
 
-        WebElement searchBoxEl = driver.findElementById("txt_query_prefill");
+        WebElement searchBoxEl = Driver.getDriver().findElementById("txt_query_prefill");
         searchBoxEl.sendKeys("Hello world!");
-        WebElement onSearchRequestedBtn = driver.findElementById("btn_start_search");
+        WebElement onSearchRequestedBtn = Driver.getDriver().findElementById("btn_start_search");
         onSearchRequestedBtn.click();
-        WebElement searchText = new WebDriverWait(driver, 30)
-                .until(ExpectedConditions.visibilityOfElementLocated(By.id("android:id/search_src_text")));
+        WebElement searchText = Commands.waitElementAppears("android", "search_src_text", 30);
         String searchTextValue = searchText.getText();
         Assert.assertEquals(searchTextValue, "Hello world!");
     }
 
     @Test
-    public void openAlertTest() {
+    public static void openAlertTest() {
         // user launches the app
         Commands.launchApp();
 
