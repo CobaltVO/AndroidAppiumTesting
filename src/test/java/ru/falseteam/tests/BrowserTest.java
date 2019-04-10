@@ -11,20 +11,12 @@ import ru.falseteam.ui.ChromeBeta;
 
 import java.util.List;
 
-/**
- * Android Browser Sauce Labs Test.
- */
 public class BrowserTest extends Driver {
-    private static AppiumDriver<WebElement> driver;
-
-    public static final String USERNAME = "YOUR_USERNAME";
-    public static final String ACCESS_KEY = "YOUR_ACCESS_KEY";
-    public static final String URL = "https://" + USERNAME + ":" + ACCESS_KEY + "@ondemand.saucelabs.com:443/wd/hub";
-
     private static final int TIMEOUT = 20;
 
     @Test
     public static void launchBrowser() {
+        AppiumDriver<WebElement> driver = Driver.getDriver();
         Commands.waitElementAppears(ChromeBeta.PACKAGE_NAME, ChromeBeta.COORDINATOR, TIMEOUT);
         Commands.waitElementAppears(ChromeBeta.PACKAGE_NAME, ChromeBeta.COMPOSITOR_VIEW_HOLDER, TIMEOUT);
         driver.get("https://appium.io/");
@@ -38,7 +30,9 @@ public class BrowserTest extends Driver {
         Assert.assertNotNull(Commands.waitElementAppears(ChromeBeta.PACKAGE_NAME, ChromeBeta.TITLE, TIMEOUT));
         Assert.assertNotNull(Commands.waitElementAppears(ChromeBeta.PACKAGE_NAME, ChromeBeta.TERMS_ACCEPT, TIMEOUT));
 
-        Commands.clickOnElementById(ChromeBeta.PACKAGE_NAME, ChromeBeta.TERMS_ACCEPT, TIMEOUT);
+        WebElement element = Commands.findElementById(ChromeBeta.PACKAGE_NAME, ChromeBeta.TERMS_ACCEPT);
+        Assert.assertNotNull(element, "No such element");
+        element.click();
     }
 
     private static void selectSearchingMachine() {
@@ -54,7 +48,10 @@ public class BrowserTest extends Driver {
                 button.click();
             }
         }
-        Commands.clickOnElementById(ChromeBeta.PACKAGE_NAME, ChromeBeta.BUTTON_PRIMARY, TIMEOUT);
+
+        WebElement element = Commands.findElementById(ChromeBeta.PACKAGE_NAME, ChromeBeta.BUTTON_PRIMARY);
+        Assert.assertNotNull(element, "No such element");
+        element.click();
     }
 
     private static void skipSignInScreen() {
@@ -64,6 +61,8 @@ public class BrowserTest extends Driver {
         Assert.assertNotNull(Commands.waitElementAppears(ChromeBeta.PACKAGE_NAME, ChromeBeta.NEGATIVE_BUTTON, TIMEOUT));
         Assert.assertNotNull(Commands.waitElementAppears(ChromeBeta.PACKAGE_NAME, ChromeBeta.POSITIVE_BUTTON, TIMEOUT));
 
-        Commands.clickOnElementById(ChromeBeta.PACKAGE_NAME, ChromeBeta.NEGATIVE_BUTTON, TIMEOUT);
+        WebElement element = Commands.findElementById(ChromeBeta.PACKAGE_NAME, ChromeBeta.NEGATIVE_BUTTON);
+        Assert.assertNotNull(element, "No such element");
+        element.click();
     }
 }

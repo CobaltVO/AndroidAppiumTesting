@@ -1,7 +1,7 @@
 package ru.falseteam.env;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -10,22 +10,14 @@ import org.testng.Assert;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class Commands {
     private final static String DELIMITER_ID = ":" + "id/";
+    private final static long STANDARD_TIMEOUT = 20L;
 
     public static void launchApp() {
         String response = executeAdbShellCommand("am start -n " + Constants.PACKAGE_NAME + "/" + Constants.MAIN_ACTIVITY_NAME);
         Assert.assertTrue(!response.contains("Error"));
-    }
-
-    public static void wait(int sec) {
-        try {
-            Thread.sleep(TimeUnit.SECONDS.toMillis(sec));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -46,56 +38,30 @@ public class Commands {
     public static WebElement findElementById(String packageName, String id) {
         WebElement element;
         try {
-            element = Driver.getDriver().findElement(By.id(packageName + DELIMITER_ID + id));
-        } catch (NoSuchElementException e) {
+            element = waitElementAppears(packageName, id, STANDARD_TIMEOUT);
+        } catch (TimeoutException e) {
             element = null;
         }
         return element;
     }
 
     public static List<WebElement> findElementsById(String packageName, String id) {
-        List<WebElement> element;
+        List<WebElement> elements;
         try {
-            element = Driver.getDriver().findElements(By.id(packageName + DELIMITER_ID + id));
-        } catch (NoSuchElementException e) {
-            return null;
+            elements = waitElementsAppears(packageName, id, STANDARD_TIMEOUT);
+        } catch (TimeoutException e) {
+            elements = null;
         }
-        if (element.isEmpty()) element = null;
-        return element;
+        return elements;
     }
 
-    public static void clickOnElementById(String packageName, String id, int timeoutOfElementToBeVisibleSec) {
-        WebElement element;
-        int t = 0;
-        while (t < timeoutOfElementToBeVisibleSec) {
-            element = findElementById(packageName, id);
-            if (element != null) {
-                element.click();
-                return;
-            }
-            wait(1);
-            t++;
-        }
-        Assert.fail("There is no such an element and it can't be clicked");
-    }
-
-    public static String getTextFromElementById(String packageName, String id, int timeoutOfElementToBeVisibleSec) {
-        WebElement element;
-        int t = 0;
-        while (t < timeoutOfElementToBeVisibleSec) {
-            element = findElementById(packageName, id);
-            if (element != null) {
-                return element.getText();
-            }
-            wait(1);
-            t++;
-        }
-        Assert.fail("There is no such an element and text can't be received from it");
-        return null;
-    }
-
-    public static WebElement waitElementAppears(String packageName, String id, int timeoutSeconds) {
+    public static WebElement waitElementAppears(String packageName, String id, long timeoutSeconds) {
         return new WebDriverWait(Driver.getDriver(), timeoutSeconds)
                 .until(ExpectedConditions.visibilityOfElementLocated(By.id(packageName + DELIMITER_ID + id)));
+    }
+
+    public static List<WebElement> waitElementsAppears(String packageName, String id, long timeoutSeconds) {
+        return new WebDriverWait(Driver.getDriver(), timeoutSeconds)
+                .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.id(packageName + DELIMITER_ID + id)));
     }
 }

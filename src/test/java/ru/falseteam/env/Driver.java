@@ -22,8 +22,8 @@ public class Driver {
 
     @AfterSuite
     public static void globalTearDown() {
-        service.stop();
         driver.quit();
+        service.stop();
     }
 
     private static void startAppium() {
